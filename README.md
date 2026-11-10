@@ -130,3 +130,4 @@ photoshot-wardrobe/
   - Pastikan path selalu diawali garis miring: `"/images/nama-file.jpg"`, bukan `"images/nama-file.jpg"`.
 * **Error setelah edit `clothingData.js`?**
   - Pastikan tidak ada tanda koma (`,`) atau tanda kutip (`"`) yang terhapus secara tidak sengaja saat mengedit.
+
