@@ -1,4 +1,5 @@
 import React from "react";
+import BrandLogo from "./BrandLogo";
 
 export default function HomeHero({ onExploreClick }) {
   return (
@@ -19,6 +20,7 @@ export default function HomeHero({ onExploreClick }) {
 
         {/* Tengah: Judul & Tombol "Shop Now" */}
         <div className="ck-hero-center">
+          <BrandLogo size={96} className="ck-hero-logo" />
           <span className="ck-hero-tag">NEW COLLECTION</span>
           <h2 className="ck-hero-title">Just Landed</h2>
           <button className="ck-hero-cta" onClick={onExploreClick}>
@@ -41,7 +43,7 @@ export default function HomeHero({ onExploreClick }) {
 
         {/* Signature watermark di pojok kanan bawah seperti pada contoh C&K */}
         <div className="ck-hero-watermark">
-          30 Years
+          Kisera
         </div>
       </div>
     </section>

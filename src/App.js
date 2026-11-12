@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import HomeHero from "./components/HomeHero";
+import BrandLogo from "./components/BrandLogo";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductGrid from "./components/ProductGrid";
 import WarehouseView from "./components/WarehouseView";
@@ -112,16 +113,21 @@ function App() {
             ) : null}
           </div>
 
-          {/* Tengah: Logo Wardrobe Kisera */}
+          {/* Tengah: Logo bulat Kisera Wardrobe + wordmark */}
           <div className="ck-header-center">
-            <h1
-              className="ck-main-logo"
-              onClick={() => setCurrentPage("home")}
-              title="Kembali ke Beranda"
-            >
-              WARDROBE KISERA
+            <h1 className="ck-logo-heading">
+              <button
+                className="ck-logo-btn"
+                onClick={() => setCurrentPage("home")}
+                title="Kembali ke Beranda"
+              >
+                <BrandLogo size={52} className="ck-header-logo" />
+                <span className="ck-logo-wordmark">
+                  <span className="ck-main-logo">KISERA</span>
+                  <span className="ck-logo-sub">WARDROBE &bull; STUDIO PHOTOSHOT</span>
+                </span>
+              </button>
             </h1>
-            <span className="ck-logo-sub">STUDIO PHOTOSHOT</span>
           </div>
 
           {/* Sisi Kanan: Wishlist, Bag, Profile, Language */}
@@ -290,8 +296,11 @@ function App() {
       <footer className="site-footer">
         <div className="footer-inner">
           <div className="footer-brand">
-            <p className="footer-logo">WARDROBE KISERA</p>
-            <p className="footer-tagline">Photoshot Wardrobe &bull; Studio Management System</p>
+            <BrandLogo size={64} className="footer-logo-badge" />
+            <div className="footer-brand-text">
+              <p className="footer-logo">KISERA WARDROBE</p>
+              <p className="footer-tagline">Photoshot Wardrobe &bull; Studio Management System</p>
+            </div>
           </div>
           <div className="footer-links">
             <p>15 Koleksi Pakaian (5 Atasan, 5 Bawahan, 5 Dress)</p>
@@ -300,7 +309,7 @@ function App() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 WARDROBE KISERA &bull; Studio Photoshot Wardrobe. All rights reserved.</p>
+          <p>&copy; 2026 KISERA WARDROBE &bull; Studio Photoshot Wardrobe. All rights reserved.</p>
         </div>
       </footer>
     </div>

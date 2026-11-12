@@ -139,15 +139,51 @@ body {
   user-select: none;
 }
 
-.ck-main-logo {
-  font-family: var(--sans);
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  color: var(--black);
+.ck-logo-heading {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1;
+}
+
+.ck-logo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: none;
+  border: none;
   cursor: pointer;
+  padding: 0;
+}
+
+/* Logo bulat dari foto brand (PNG transparan) */
+.brand-logo {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.35s ease;
+}
+
+.ck-logo-btn:hover .brand-logo {
+  transform: rotate(-8deg) scale(1.05);
+}
+
+.ck-logo-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  text-align: left;
+}
+
+.ck-main-logo {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--black);
+  line-height: 1;
   text-transform: uppercase;
-  margin-bottom: 0.1rem;
 }
 
 .ck-logo-sub {
@@ -393,6 +429,23 @@ body {
 
 .ck-hero-center:hover {
   background: rgba(255, 255, 255, 0.58);
+}
+
+.ck-hero-logo {
+  margin-bottom: 1.2rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  animation: logo-rise 0.9s ease both;
+}
+
+@keyframes logo-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .ck-hero-tag {
@@ -1187,6 +1240,16 @@ body {
   gap: 2rem;
 }
 
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.footer-logo-badge {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
 .footer-logo {
   font-family: var(--sans);
   font-size: 1.2rem;
@@ -1262,6 +1325,24 @@ body {
   }
 
   .ck-header-left, .ck-header-right {
+    justify-content: center;
+  }
+
+  .ck-header-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ck-main-logo {
+    font-size: 1.3rem;
+  }
+
+  .ck-hero-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .footer-brand {
     justify-content: center;
   }
 
