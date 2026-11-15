@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import HomeHero from "./components/HomeHero";
 import BrandLogo from "./components/BrandLogo";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductGrid from "./components/ProductGrid";
 import WarehouseView from "./components/WarehouseView";
 import ClothingDetail from "./components/ClothingDetail";
+import CartModal from "./components/CartModal";
+import CheckoutNotaModal from "./components/CheckoutNotaModal";
+import MasterReceiptModal from "./components/MasterReceiptModal";
 import { semuaBaju, WARNA_MASTER } from "./data/clothingData";
 import "./App.css";
 
@@ -17,6 +21,104 @@ function App() {
   const [selectedKategori, setSelectedKategori] = useState([]);
   const [sortBy, setSortBy] = useState("default");
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // State Keranjang Belanja & Checkout Nota
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem("kisera_wardrobe_cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [checkoutNota, setCheckoutNota] = useState(null);
+  const [isMasterReceiptOpen, setIsMasterReceiptOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+
+  // Persist keranjang ke localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("kisera_wardrobe_cart", JSON.stringify(cart));
+    } catch (e) {}
+  }, [cart]);
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(""), 2800);
+  };
+
+  const handleAddToCart = (baju, qty = 1) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === baju.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === baju.id ? { ...item, qty: item.qty + qty } : item
+        );
+      }
+      return [...prev, { ...baju, qty }];
+    });
+    showToast(`✓ "${baju.nama}" ditambahkan ke keranjang`);
+  };
+
+  const handleUpdateCartQty = (bajuId, newQty) => {
+    if (newQty <= 0) {
+      handleRemoveFromCart(bajuId);
+      return;
+    }
+    setCart((prev) =>
+      prev.map((item) => (item.id === bajuId ? { ...item, qty: newQty } : item))
+    );
+  };
+
+  const handleRemoveFromCart = (bajuId) => {
+    setCart((prev) => prev.filter((item) => item.id !== bajuId));
+  };
+
+  const handleClearCart = () => {
+    setCart([]);
+  };
+
+  const handleCheckout = () => {
+    if (cart.length === 0) return;
+    const now = new Date();
+    const notaData = {
+      id: `KW-CO-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${String(Date.now()).slice(-4)}`,
+      tanggal: now.toLocaleString("id-ID", {
+        dateStyle: "full",
+        timeStyle: "short",
+      }),
+      items: [...cart],
+      totalPcs: cart.reduce((sum, item) => sum + item.qty, 0),
+    };
+    setCheckoutNota(notaData);
+    setIsCartOpen(false);
+  };
+
+  // Checkout langsung 1 baju dari modal detail
+  const handleDirectCheckout = (baju, qty = 1) => {
+    const now = new Date();
+    const notaData = {
+      id: `KW-CO-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${String(Date.now()).slice(-4)}`,
+      tanggal: now.toLocaleString("id-ID", {
+        dateStyle: "full",
+        timeStyle: "short",
+      }),
+      items: [{ ...baju, qty }],
+      totalPcs: qty,
+    };
+    setCheckoutNota(notaData);
+  };
+
+  const totalCartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  // Animasi fade-slide untuk transisi antar halaman
+  const pageTransition = {
+    initial: { opacity: 0, y: 30 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+    transition: { type: "spring", stiffness: 200, damping: 28, mass: 0.8 },
+  };
 
   // 5 Warna Master
   const allWarnas = WARNA_MASTER.map((w) => w.nama);
@@ -101,12 +203,26 @@ function App() {
                     onClick={() => setCurrentPage("katalog")}
                   >
                     SHOP
+                    {currentPage === "katalog" && (
+                      <motion.span
+                        className="ck-nav-underline"
+                        layoutId="nav-underline"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
                   </button>
                   <button
                     className={`ck-nav-link ${currentPage === "gudang" ? "active" : ""}`}
                     onClick={() => setCurrentPage("gudang")}
                   >
                     GUDANG (5 RAK)
+                    {currentPage === "gudang" && (
+                      <motion.span
+                        className="ck-nav-underline"
+                        layoutId="nav-underline"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
                   </button>
                 </nav>
               </>
@@ -130,7 +246,7 @@ function App() {
             </h1>
           </div>
 
-          {/* Sisi Kanan: Wishlist, Bag, Profile, Language */}
+          {/* Sisi Kanan: Wishlist, Cetak Receipt (15), Checkout (CO), Profile, Language */}
           <div className="ck-header-right">
             <button className="ck-icon-btn" title="Wishlist">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -138,17 +254,35 @@ function App() {
               </svg>
             </button>
 
+            {/* 1. CETAK RECEIPT (Ikon tas dengan badge 15 — Khusus Cetak Receipt Inventaris Gudang) */}
             <button
-              className="ck-icon-btn ck-bag-btn"
-              onClick={() => setCurrentPage("katalog")}
-              title="Koleksi Baju"
+              className="ck-header-receipt-btn"
+              onClick={() => setIsMasterReceiptOpen(true)}
+              title="Cetak Receipt Koleksi Studio & Panduan Rak (15 Baju)"
             >
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 01-8 0" />
+              <div className="ck-receipt-icon-wrap">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <path d="M16 10a4 4 0 01-8 0" />
+                </svg>
+                <span className="ck-receipt-badge" title="15 Baju Studio">{semuaBaju.length}</span>
+              </div>
+              <span className="ck-receipt-text">CETAK RECEIPT</span>
+            </button>
+
+            {/* 2. CHECKOUT (CO) — DIBEDAKAN SECARA KHUSUS DENGAN STATUS KERANJANG */}
+            <button
+              className={`ck-co-nav-btn ${totalCartCount > 0 ? "has-items" : ""}`}
+              onClick={() => setIsCartOpen(true)}
+              title={`Keranjang & Checkout (CO) - ${totalCartCount} item`}
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
               </svg>
-              <span className="ck-bag-count">{semuaBaju.length}</span>
+              <span className="ck-co-label">CO ({totalCartCount})</span>
             </button>
 
             <button className="ck-icon-btn" title="Akun">
@@ -197,13 +331,29 @@ function App() {
 
       {/* Konten Utama Berdasarkan Halaman */}
       <main className="ck-main-content">
+        <AnimatePresence mode="wait">
         {/* HALAMAN 1: TAMPILAN AWAL (LANDING HERO SEPERTI C&K - POLOSAN) */}
         {currentPage === "home" && (
-          <HomeHero onExploreClick={() => setCurrentPage("katalog")} />
+          <motion.div
+            key="page-home"
+            initial={pageTransition.initial}
+            animate={pageTransition.animate}
+            exit={pageTransition.exit}
+            transition={pageTransition.transition}
+          >
+            <HomeHero onExploreClick={() => setCurrentPage("katalog")} />
+          </motion.div>
         )}
 
         {/* HALAMAN 2: PILIH-PILIH PRODUK (KATALOG DENGAN SIDEBAR FILTER C&K) */}
         {currentPage === "katalog" && (
+          <motion.div
+            key="page-katalog"
+            initial={pageTransition.initial}
+            animate={pageTransition.animate}
+            exit={pageTransition.exit}
+            transition={pageTransition.transition}
+          >
           <div className="catalog-layout">
             <div className="breadcrumb">
               <span onClick={() => setCurrentPage("home")} style={{ cursor: "pointer" }}>Home</span>
@@ -272,10 +422,18 @@ function App() {
               </div>
             </div>
           </div>
+          </motion.div>
         )}
 
         {/* HALAMAN 3: SISTEM GUDANG (5 RAK) */}
         {currentPage === "gudang" && (
+          <motion.div
+            key="page-gudang"
+            initial={pageTransition.initial}
+            animate={pageTransition.animate}
+            exit={pageTransition.exit}
+            transition={pageTransition.transition}
+          >
           <div className="warehouse-page">
             <div className="breadcrumb">
               <span onClick={() => setCurrentPage("home")} style={{ cursor: "pointer" }}>Home</span>
@@ -284,12 +442,52 @@ function App() {
             </div>
             <WarehouseView onItemClick={setSelectedBaju} />
           </div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </main>
 
       {/* Modal Detail Baju */}
       {selectedBaju && (
-        <ClothingDetail baju={selectedBaju} onClose={() => setSelectedBaju(null)} />
+        <ClothingDetail
+          baju={selectedBaju}
+          onClose={() => setSelectedBaju(null)}
+          onAddToCart={handleAddToCart}
+          onOpenCart={() => setIsCartOpen(true)}
+          onDirectCheckout={handleDirectCheckout}
+        />
+      )}
+
+      {/* Modal Cetak Master Receipt (15 Baju Studio) */}
+      <MasterReceiptModal
+        isOpen={isMasterReceiptOpen}
+        onClose={() => setIsMasterReceiptOpen(false)}
+      />
+
+      {/* Drawer Keranjang Belanja */}
+      <CartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        onUpdateQty={handleUpdateCartQty}
+        onRemoveItem={handleRemoveFromCart}
+        onCheckout={handleCheckout}
+      />
+
+      {/* Modal Nota Pengambilan Baju per Rak Gudang */}
+      {checkoutNota && (
+        <CheckoutNotaModal
+          nota={checkoutNota}
+          onClose={() => setCheckoutNota(null)}
+          onClearCart={handleClearCart}
+        />
+      )}
+
+      {/* Notifikasi Toast Masuk Keranjang */}
+      {toastMsg && (
+        <div className="ck-toast-notification">
+          <span>{toastMsg}</span>
+        </div>
       )}
 
       {/* Footer Wardrobe Kisera */}

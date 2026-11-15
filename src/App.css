@@ -123,14 +123,18 @@ body {
   opacity: 0.65;
 }
 
-.ck-nav-link.active::after {
-  content: '';
+/* Active underline now handled by framer-motion layoutId (.ck-nav-underline) */
+/* .ck-nav-link.active::after — disabled, replaced by motion.span */
+
+/* Animated underline indicator via framer-motion layoutId */
+.ck-nav-underline {
   position: absolute;
   bottom: -2px;
   left: 0;
   right: 0;
   height: 1.5px;
   background: var(--black);
+  display: block;
 }
 
 /* Logo Tengah */
@@ -203,24 +207,133 @@ body {
   gap: 1.4rem;
 }
 
-.ck-bag-btn {
-  position: relative;
+/* Tombol 1: Cetak Receipt di Header (Ikon Tas dengan angka 15) */
+.ck-header-receipt-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid var(--grey-300);
+  border-radius: 20px;
+  padding: 0.35rem 0.75rem 0.35rem 0.6rem;
+  cursor: pointer;
+  color: var(--black);
+  transition: all 0.2s ease;
 }
 
-.ck-bag-count {
+.ck-header-receipt-btn:hover {
+  background: var(--grey-100);
+  border-color: var(--black);
+}
+
+.ck-receipt-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ck-receipt-badge {
   position: absolute;
-  top: -4px;
+  top: -5px;
   right: -8px;
   background: var(--black);
   color: var(--white);
   font-size: 0.58rem;
+  font-weight: 700;
   width: 15px;
   height: 15px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+}
+
+.ck-receipt-text {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--black);
+}
+
+/* Tombol 2: Checkout (CO) di Header (Dibedakan secara visual) */
+.ck-co-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fbfbfb;
+  border: 1.5px solid var(--black);
+  color: var(--black);
+  padding: 0.38rem 0.85rem;
+  border-radius: 20px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ck-co-nav-btn:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+.ck-co-nav-btn.has-items {
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ck-co-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Tombol Direct CO di Modal Detail Baju */
+.modal-ck-direct-co-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--black);
+  color: var(--white);
+  border: 1px solid var(--black);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.modal-ck-direct-co-btn:hover {
+  background: #2a2a2a;
+  transform: translateY(-1px);
+}
+
+.nota-badge-master {
+  background: #2c3e50;
+  color: var(--white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 0.4rem 0.8rem;
+  border-radius: 2px;
+}
+
+.nota-badge-ready {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  display: inline-block;
 }
 
 .ck-lang-selector {
@@ -308,12 +421,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.22) 100%
-  );
+  background: transparent;
   pointer-events: none;
   z-index: 1;
 }
@@ -352,22 +460,21 @@ body {
 .ck-model-card {
   width: 280px;
   height: 440px;
-  background: rgba(255, 255, 255, 0.38);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: none;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.3s ease;
+  transition: transform 0.4s ease, border-color 0.3s ease;
 }
 
 .ck-model-card:hover {
   transform: translateY(-6px);
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09);
+  border-color: rgba(255, 255, 255, 0.85);
 }
 
 .ck-model-placeholder {
@@ -376,7 +483,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.15) 100%);
+  background: transparent;
   padding: 2rem;
   text-align: center;
 }
@@ -392,22 +499,24 @@ body {
   font-family: var(--sans);
   font-size: 0.6rem;
   letter-spacing: 0.2em;
-  color: var(--grey-600);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  color: var(--black);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding-bottom: 0.3rem;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.85);
 }
 
 .ck-silhouette-icon {
   font-size: 4rem;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.06));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
 }
 
 .ck-silhouette-caption {
   font-family: var(--serif);
   font-size: 1.15rem;
-  font-weight: 400;
+  font-weight: 500;
   font-style: italic;
-  color: var(--dark);
+  color: var(--black);
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.85);
 }
 
 /* Bagian Tengah: Judul & Shop Now */
@@ -418,22 +527,22 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  padding: 2.2rem 3rem;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: background 0.3s ease;
+  padding: 2rem 2.5rem;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: none;
+  transition: border-color 0.3s ease;
 }
 
 .ck-hero-center:hover {
-  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(255, 255, 255, 0.85);
 }
 
 .ck-hero-logo {
   margin-bottom: 1.2rem;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   animation: logo-rise 0.9s ease both;
 }
 
@@ -450,12 +559,13 @@ body {
 
 .ck-hero-tag {
   font-family: var(--sans);
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.3em;
-  color: var(--grey-500);
+  color: var(--black);
   margin-bottom: 0.8rem;
   text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.85);
 }
 
 .ck-hero-title {
@@ -466,6 +576,7 @@ body {
   color: var(--black);
   margin-bottom: 1.2rem;
   line-height: 1.1;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.85), 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
 .ck-hero-cta {
@@ -482,6 +593,7 @@ body {
   text-decoration: underline;
   text-underline-offset: 6px;
   text-decoration-thickness: 1.5px;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.85);
   transition: opacity 0.2s, transform 0.2s;
 }
 
@@ -1363,3 +1475,953 @@ body {
     text-align: center;
   }
 }
+
+/* ============================================================
+   MODAL DETAIL TAMBAHAN (MASUKKAN KE KERANJANG & NOTA RAK)
+   ============================================================ */
+.modal-img-rak-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.78);
+  color: var(--white);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-ck-row-highlight {
+  background: #fbf8f4;
+  padding: 0.35rem 0.5rem;
+  border-left: 3px solid var(--black);
+}
+
+.modal-ck-rak-val {
+  color: var(--black);
+  font-weight: 700 !important;
+}
+
+.modal-ck-rak-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #f5f2eb;
+  border: 1px solid #e5dfd2;
+  padding: 0.7rem 0.9rem;
+  margin-top: 0.9rem;
+  font-size: 0.72rem;
+  color: #4a453e;
+  line-height: 1.45;
+}
+
+.modal-rak-notice-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.modal-ck-action-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.modal-qty-picker {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--grey-300);
+  background: var(--white);
+  height: 44px;
+}
+
+.modal-qty-btn {
+  background: none;
+  border: none;
+  width: 38px;
+  height: 100%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.modal-qty-btn:hover:not(:disabled) {
+  background: var(--grey-100);
+}
+
+.modal-qty-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.modal-qty-val {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 32px;
+  text-align: center;
+}
+
+.modal-ck-add-cart-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: 44px;
+  background: var(--black);
+  color: var(--white);
+  border: 1px solid var(--black);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.modal-ck-add-cart-btn:hover {
+  background: #2a2a2a;
+}
+
+.modal-ck-add-cart-btn.added-success {
+  background: #27ae60;
+  border-color: #27ae60;
+}
+
+.modal-ck-secondary-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.modal-ck-co-now-btn {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: #f7ede2;
+  border: 1px solid #e8d7c4;
+  color: #845a2d;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.modal-ck-co-now-btn:hover {
+  background: #ebd8c3;
+  color: #63401c;
+}
+
+.modal-ck-close-text-btn {
+  background: transparent !important;
+  color: var(--grey-600) !important;
+  border: 1px solid var(--grey-300) !important;
+  height: 38px !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.15em !important;
+}
+
+.modal-ck-close-text-btn:hover {
+  background: var(--grey-100) !important;
+  color: var(--black) !important;
+}
+
+/* ============================================================
+   CART DRAWER (KERANJANG BELANJA & CO GUDANG)
+   ============================================================ */
+.cart-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.25s ease;
+}
+
+.cart-drawer {
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.2);
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.cart-drawer-header {
+  padding: 1.4rem 1.6rem;
+  border-bottom: 1px solid var(--grey-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cart-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.cart-drawer-title {
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--black);
+  margin: 0;
+}
+
+.cart-count-pill {
+  font-size: 0.65rem;
+  background: var(--grey-100);
+  border: 1px solid var(--grey-300);
+  color: var(--black);
+  padding: 0.15rem 0.5rem;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.cart-drawer-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--dark);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+
+.cart-drawer-close:hover {
+  opacity: 0.6;
+}
+
+.cart-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.2rem 1.6rem;
+}
+
+.cart-info-banner {
+  background: #fbf9f4;
+  border: 1px solid #eee5d4;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.72rem;
+  color: #65543d;
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+}
+
+.cart-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.cart-empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.cart-empty-title {
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.cart-empty-desc {
+  font-size: 0.78rem;
+  color: var(--grey-500);
+  line-height: 1.5;
+  max-width: 280px;
+  margin-bottom: 1.5rem;
+}
+
+.cart-empty-btn {
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 0.8rem 1.6rem;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cart-empty-btn:hover {
+  opacity: 0.85;
+}
+
+.cart-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.cart-item-card {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.cart-item-thumb {
+  width: 80px;
+  height: 104px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--grey-100);
+}
+
+.cart-item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-emoji {
+  font-size: 2.2rem;
+}
+
+.cart-item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cart-item-cat {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--grey-500);
+  text-transform: uppercase;
+}
+
+.cart-item-del {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--grey-400);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.cart-item-del:hover {
+  color: #e74c3c;
+}
+
+.cart-item-name {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0.25rem 0 0.35rem;
+}
+
+.cart-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--grey-600);
+  margin-bottom: 0.4rem;
+}
+
+.cart-meta-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cart-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* NOTA NOMOR RAK GUDANG PADA ITEM */
+.cart-item-rak-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fbf6ec;
+  border: 1px solid #eddcc3;
+  padding: 0.35rem 0.55rem;
+  margin: 0.35rem 0 0.6rem;
+  font-size: 0.68rem;
+  color: #6a4f2b;
+}
+
+.cart-rak-icon {
+  font-size: 0.85rem;
+}
+
+.cart-rak-text strong {
+  color: #3b2811;
+}
+
+.cart-qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.cart-qty-label {
+  font-size: 0.7rem;
+  color: var(--grey-500);
+}
+
+.cart-qty-ctrl {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--grey-300);
+  height: 28px;
+}
+
+.cart-qty-btn {
+  background: none;
+  border: none;
+  width: 26px;
+  height: 100%;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+}
+
+.cart-qty-btn:hover:not(:disabled) {
+  background: var(--grey-100);
+}
+
+.cart-qty-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cart-qty-num {
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+}
+
+.cart-drawer-footer {
+  padding: 1.4rem 1.6rem;
+  border-top: 1px solid var(--grey-200);
+  background: #fafafa;
+}
+
+.cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.cart-sum-label {
+  font-size: 0.78rem;
+  color: var(--grey-600);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cart-sum-val {
+  font-family: var(--sans);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.cart-rak-summary-note {
+  font-size: 0.68rem;
+  color: var(--grey-500);
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.cart-checkout-btn {
+  width: 100%;
+  padding: 0.95rem 1.4rem;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all 0.25s;
+}
+
+.cart-checkout-btn:hover {
+  background: #2a2a2a;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   MODAL NOTA PENGAMBILAN RAK GUDANG (CHECKOUT RECEIPT)
+   ============================================================ */
+.nota-overlay {
+  background: rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: blur(6px) !important;
+  overflow-y: auto !important;
+  padding: 2rem 1rem !important;
+}
+
+.nota-modal {
+  background: var(--white);
+  max-width: 680px;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nota-paper {
+  padding: 2.4rem 2.4rem 2rem;
+  background: var(--white);
+}
+
+.nota-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nota-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nota-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--black);
+  margin: 0 0 0.2rem;
+}
+
+.nota-subtitle {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-500);
+  margin: 0;
+}
+
+.nota-badge-co {
+  background: #27ae60;
+  color: var(--white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 0.4rem 0.8rem;
+  border-radius: 2px;
+}
+
+.nota-divider {
+  height: 1px;
+  background: var(--grey-200);
+  margin: 1.4rem 0;
+}
+
+.nota-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  background: #fafafa;
+  border: 1px solid var(--grey-200);
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1.6rem;
+}
+
+.nota-meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nota-meta-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--grey-500);
+  text-transform: uppercase;
+}
+
+.nota-meta-value {
+  font-size: 0.82rem;
+  color: var(--black);
+}
+
+.nota-invoice-code {
+  font-family: 'SF Mono', monospace;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.nota-status-pill {
+  color: #1e824c;
+  font-weight: 600;
+}
+
+.nota-section-title {
+  text-align: center;
+  position: relative;
+  margin: 1.8rem 0 1.2rem;
+}
+
+.nota-section-title::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--grey-300);
+  z-index: 1;
+}
+
+.nota-section-title span {
+  position: relative;
+  z-index: 2;
+  background: var(--white);
+  padding: 0 1.2rem;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--black);
+  text-transform: uppercase;
+}
+
+.nota-rak-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.nota-rak-group {
+  border: 1px solid var(--grey-300);
+  overflow: hidden;
+}
+
+.nota-rak-header {
+  background: #f7f5f0;
+  border-bottom: 1px solid var(--grey-300);
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nota-rak-tag {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #2b2316;
+}
+
+.nota-rak-desc {
+  font-size: 0.7rem;
+  color: #6b5c46;
+}
+
+.nota-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+
+.nota-table th {
+  background: #fdfdfd;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--grey-500);
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.nota-table td {
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--grey-100);
+  color: var(--black);
+}
+
+.nota-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.nota-cell-check {
+  text-align: center;
+}
+
+.nota-checkbox-box {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--grey-400);
+  border-radius: 2px;
+}
+
+.nota-cell-code {
+  font-family: 'SF Mono', monospace;
+  font-weight: 600;
+  color: var(--grey-600);
+}
+
+.nota-item-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.nota-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.nota-color-text {
+  font-weight: 400;
+  color: var(--grey-500);
+  font-size: 0.7rem;
+}
+
+.nota-cell-muted {
+  color: var(--grey-500);
+}
+
+.nota-cell-qty {
+  font-weight: 700;
+  text-align: right;
+}
+
+.nota-footer-summary {
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--grey-300);
+}
+
+.nota-note {
+  font-size: 0.68rem;
+  color: var(--grey-500);
+  font-style: italic;
+  margin-bottom: 1.4rem;
+}
+
+.nota-signature-area {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.nota-sig-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  font-size: 0.7rem;
+  color: var(--grey-600);
+  text-align: center;
+}
+
+.nota-sig-line {
+  width: 140px;
+  height: 1px;
+  background: var(--grey-400);
+}
+
+.nota-actions {
+  display: flex;
+  gap: 0.8rem;
+  padding: 1.2rem 2.4rem 1.8rem;
+  background: #fbfbfb;
+  border-top: 1px solid var(--grey-200);
+}
+
+.nota-btn-download {
+  flex: 1.3;
+  padding: 0.85rem 1.4rem;
+  background: var(--black);
+  color: var(--white);
+  border: 1px solid var(--black);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  transition: all 0.2s ease;
+}
+
+.nota-btn-download:hover:not(:disabled) {
+  background: #2a2a2a;
+  transform: translateY(-1px);
+}
+
+.nota-btn-download:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.nota-btn-print {
+  padding: 0.85rem 1.2rem;
+  background: #f5f2eb;
+  color: #3d3428;
+  border: 1px solid #dcd4c5;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  transition: all 0.2s;
+}
+
+.nota-btn-print:hover {
+  background: #ebe5d8;
+}
+
+.nota-btn-finish {
+  padding: 0.85rem 1.4rem;
+  background: var(--white);
+  color: var(--grey-700);
+  border: 1px solid var(--grey-300);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nota-btn-finish:hover {
+  background: var(--grey-100);
+  color: var(--black);
+}
+
+/* Toast Notifikasi Sukses Masuk Keranjang */
+.ck-toast-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #1a1a1a;
+  color: #ffffff;
+  padding: 0.85rem 1.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border-left: 4px solid #27ae60;
+  z-index: 1200;
+  animation: slideUpToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpToast {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   PRINT MEDIA STYLING (HANYA MENCETAK LEMBAR NOTA)
+   ============================================================ */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #nota-print-area, #nota-print-area * {
+    visibility: visible;
+  }
+
+  #nota-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1cm;
+    box-shadow: none;
+    background: #ffffff !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+

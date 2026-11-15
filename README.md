@@ -24,6 +24,16 @@ Website katalog pakaian dan manajemen gudang photoshot berbasis **React.js**. Me
 
 ---
 
+## 🛍️ Fitur Keranjang, Checkout (CO) & Download Nota/Receipt
+
+Website ini dilengkapi sistem **Keranjang Photoshot**, **Cetak/Download Receipt**, dan **Checkout Nota Pengambilan**:
+1. **Cetak / Download Master Receipt:** Klik tombol **`CETAK RECEIPT`** di navbar atas untuk melihat dan men-download lembar receipt panduan seluruh 15 inventaris pakaian di 5 rak gudang studio.
+2. **Pilih Baju & Masukkan Keranjang:** Klik baju mana pun di katalog untuk membuka detail, tentukan jumlah (quantity), lalu klik **`MASUKKAN KE KERANJANG`** atau langsung klik **`CHECKOUT (CO) SEKARANG`**.
+3. **Lihat Keranjang & Info Rak:** Klik tombol **`CO`** di navbar atas. Setiap item memiliki label jelas menunjukkan **tersimpan di Rak nomor berapa**.
+4. **Download Nota Hasil Checkout:** Klik tombol **`DOWNLOAD NOTA (.PNG)`** untuk langsung mengunduh lembar nota resmi berkualitas tinggi ke perangkat Anda (bisa disimpan di HP/laptop atau dikirim lewat WhatsApp). Tersedia juga tombol cetak printer.
+
+---
+
 ## 🖼️ Panduan Mengganti & Menambahkan Gambar Baju
 
 Semua data pakaian berada di dalam satu file:
